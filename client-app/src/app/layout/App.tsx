@@ -6,32 +6,23 @@ import ActivityDashBoard from "../../features/activities/dashboard/ActivityDashB
 import { v4 as uuid } from "uuid";
 import agent from "../api/agent";
 import LoadingComponent from "./loadingComponent";
+import { useStore } from "../stores/store";
+import { observer } from "mobx-react-lite";
 
 function App() {
+  const{activityStore} = useStore();
+
+
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined);
   const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    agent.Activities.list().then((res) => {
-      let activities: Activity[] = [];
-      res.forEach((activity) => {
-        activity.date = activity.date.split("T")[0];
-        activities.push(activity);
-      });
-      setActivities(activities);
-      setLoading(false);
-    });
-    /*axios
-      .get<Activity[]>("http://localhost:5000/api/activities")
-      .then((res) => {
-        setActivities(res.data);
-      });*/
-  }, []);
+    activityStore.loadActivities();
+  }, [activityStore]);
 
   function handleSelectedActivity(id: string) {
     setSelectedActivity(activities.find((x) => x.id === id));
@@ -81,14 +72,14 @@ function App() {
     });
   }
 
-  if (loading) return <LoadingComponent content="Loading Page" />;
+  if (activityStore.loadingInitial) return <LoadingComponent content="Loading Page" />;
 
   return (
     <>
       <NavBar openForm={handleFormOpen} />
       <Container style={{ marginTop: "7em" }}>
         <ActivityDashBoard
-          activities={activities}
+          activities={activityStore.activities}
           selectedActivity={selectedActivity}
           selectActivity={handleSelectedActivity}
           cancelSelectActivity={handleCancelSelecteActivity}
@@ -104,4 +95,4 @@ function App() {
   );
 }
 
-export default App;
+export default observer(App);

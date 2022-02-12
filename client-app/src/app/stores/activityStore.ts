@@ -28,8 +28,7 @@ export default class ActivityStore {
         try {
             const activities = await agent.Activities.list();            
             activities.forEach(activity => {
-                activity.date = activity.date.split('T')[0];
-                this.activityRegistry.set(activity.id,activity);                
+                this.setActivity(activity);               
             });
             this.setLoadingAction(false);
 
@@ -39,7 +38,34 @@ export default class ActivityStore {
         }
     }
 
-    selectActivity = (id: string) => {
+    loadActivity =async (id:string) => {
+        let activity = this.getActivity(id);
+        if (activity) {
+            this.selectedActivity = activity;            
+        }
+        else {
+            this.loadingInitial = true;
+            try {
+                activity = await agent.Activities.details(id);
+                this.setActivity(activity);
+                this.setLoadingAction(false);
+            } catch (error) {
+                console.log(error);   
+                this.setLoadingAction(false);             
+            }
+        }
+    }
+
+    private setActivity = (activity: Activity) => {
+        activity.date = activity.date.split('T')[0];
+        this.activityRegistry.set(activity.id,activity);
+    }
+
+    private getActivity = (id: string) => {
+        return this.activityRegistry.get(id);
+    }
+
+    /*selectActivity = (id: string) => {
         this.selectedActivity = this.activityRegistry.get(id);//this.activities.find(x => x.id === id);
     }
 
@@ -54,7 +80,7 @@ export default class ActivityStore {
 
     closeForm = () => {
         this.editMode = false;
-    }
+    }*/
 
     createActivity = async (activity: Activity) => {
         this.loading = true;
@@ -104,7 +130,7 @@ export default class ActivityStore {
             runInAction(() => {
                 //this.activities = [...this.activities.filter(a => a.id !== id)];
                 this.activityRegistry.delete(id);
-                if(this.selectedActivity?.id === id) this.cancelSelectedActivity();
+                //if(this.selectedActivity?.id === id) this.cancelSelectedActivity();
                 this.loading = false;
             });            
         } catch (error) {

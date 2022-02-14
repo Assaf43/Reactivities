@@ -4,20 +4,15 @@ import { useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/loadingComponent";
 import { useStore } from "../../../app/stores/store";
-import ActivityDetails from "../details/activityDetalis";
-import ActivityForm from "../form/activityForm";
 import ActivityList from "./ActivityList";
 
-
-
 function ActivityDashBoard() {
+  const { activityStore } = useStore();
+  const { loadActivities, loadingInitial, activityRegistry } = activityStore;
 
-  const {activityStore} = useStore();
-  const {selectedActivity, editMode , loadingInitial} = activityStore;
-  
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
+    if (activityRegistry.size <= 1) loadActivities();
+  }, [activityRegistry, loadActivities]);
 
   if (loadingInitial) return <LoadingComponent content="Loading Page" />;
 
@@ -27,12 +22,7 @@ function ActivityDashBoard() {
         <ActivityList />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedActivity && !editMode && (
-          <ActivityDetails />
-        )}
-        {editMode && (
-          <ActivityForm />
-        )}
+        <h2>Activity filter</h2>
       </Grid.Column>
     </Grid>
   );

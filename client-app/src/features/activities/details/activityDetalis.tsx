@@ -1,10 +1,14 @@
 import { observer } from "mobx-react-lite";
 import * as React from "react";
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Button, Card, Image } from "semantic-ui-react";
+import { useParams } from "react-router-dom";
+import { Grid } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/loadingComponent";
 import { useStore } from "../../../app/stores/store";
+import ActivityDetailedChat from "./activityDetailedChat";
+import ActivityDetailedHeader from "./activityDetailedHeader";
+import ActivityDetailedInfo from "./activityDetailedInfo";
+import ActivityDetailedSidebar from "./activityDetailedSidebar";
 
 export default observer(function ActivityDetails() {
   const { activityStore } = useStore();
@@ -22,7 +26,21 @@ export default observer(function ActivityDetails() {
   if (loadingInitial || !activity) return <LoadingComponent />;
 
   return (
-    <Card fluid>
+    <Grid>
+      <Grid.Column width={10}>
+        <ActivityDetailedHeader activity={activity} />
+        <ActivityDetailedInfo activity={activity} />
+        <ActivityDetailedChat />
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <ActivityDetailedSidebar />
+      </Grid.Column>
+    </Grid>
+  );
+});
+
+/**
+ *  <Card fluid>
       <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
       <Card.Content>
         <Card.Header>{activity.title}</Card.Header>
@@ -50,5 +68,5 @@ export default observer(function ActivityDetails() {
         </Button.Group>
       </Card.Content>
     </Card>
-  );
-});
+ * 
+ */

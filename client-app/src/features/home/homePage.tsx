@@ -13,7 +13,7 @@ export default function HomePage() {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          Activities
+          Reactivities
         </Header>
         <Header as={"h2"} inverted content="Welcome To Reactivities" />
         <Button as={Link} to={"/activities"} inverted size="huge">

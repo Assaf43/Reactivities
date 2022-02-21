@@ -29,7 +29,7 @@ export default observer(function ActivityDetailedSidebar() {
             <Image size="tiny" src={"/assets/user.png"} />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
-                <Link to={`#`}>Bob</Link>
+                <Link to={`#`}>Assaf</Link>
               </Item.Header>
               <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
             </Item.Content>
@@ -39,7 +39,7 @@ export default observer(function ActivityDetailedSidebar() {
             <Image size="tiny" src={"/assets/user.png"} />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
-                <Link to={`#`}>Tom</Link>
+                <Link to={`#`}>Yuval</Link>
               </Item.Header>
               <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
             </Item.Content>
@@ -49,7 +49,7 @@ export default observer(function ActivityDetailedSidebar() {
             <Image size="tiny" src={"/assets/user.png"} />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
-                <Link to={`#`}>Sally</Link>
+                <Link to={`#`}>Alon</Link>
               </Item.Header>
             </Item.Content>
           </Item>

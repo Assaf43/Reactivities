@@ -19,11 +19,11 @@ export default observer(function ActivityDetailedChat() {
           <Comment>
             <Comment.Avatar src="/assets/user.png" />
             <Comment.Content>
-              <Comment.Author as="a">Matt</Comment.Author>
+              <Comment.Author as="a">Alon</Comment.Author>
               <Comment.Metadata>
                 <div>Today at 5:42PM</div>
               </Comment.Metadata>
-              <Comment.Text>How artistic!</Comment.Text>
+              <Comment.Text>bla bla bla</Comment.Text>
               <Comment.Actions>
                 <Comment.Action>Reply</Comment.Action>
               </Comment.Actions>

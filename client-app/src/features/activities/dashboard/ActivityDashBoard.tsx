@@ -15,7 +15,8 @@ function ActivityDashBoard() {
     if (activityRegistry.size <= 1) loadActivities();
   }, [activityRegistry, loadActivities]);
 
-  if (loadingInitial) return <LoadingComponent content="Loading Page" />;
+  if (loadingInitial)
+    return <LoadingComponent content="Loading Activities..." />;
 
   return (
     <Grid>

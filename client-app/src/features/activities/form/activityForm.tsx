@@ -1,16 +1,18 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { Button, Label, Segment } from "semantic-ui-react";
+import { Button, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/loadingComponent";
 import { useStore } from "../../../app/stores/store";
 import { v4 as uuid } from "uuid";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MyInputText from "../../../app/common/form/myInputText";
 import MyTextArea from "../../../app/common/form/myTextArea";
 import MySelectText from "../../../app/common/form/MySelectText";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
+import MyDateInput from "../../../app/common/form/myDateInput";
+import { Activity } from "../../../app/models/activity";
 
 export default observer(function ActivityForm() {
   const history = useHistory();
@@ -28,15 +30,15 @@ export default observer(function ActivityForm() {
     title: Yup.string().required("title is required"),
     description: Yup.string().required("description is required"),
     category: Yup.string().required(),
-    date: Yup.string().required(),
+    date: Yup.string().required("Date is reqired").nullable(),
     city: Yup.string().required(),
     venue: Yup.string().required(),
   });
 
-  const [activity, setActivity] = useState({
+  const [activity, setActivity] = useState<Activity>({
     id: "",
     title: "",
-    date: "",
+    date: null,
     description: "",
     category: "",
     city: "",
@@ -47,7 +49,7 @@ export default observer(function ActivityForm() {
     if (id) loadActivity(id).then((activity) => setActivity(activity!));
   }, [id, loadActivity]);
 
-  /*function handleSubmit() {
+  function handleFormSubmit(activity: Activity) {
     if (activity.id.length === 0) {
       let newActivity = {
         ...activity,
@@ -63,24 +65,18 @@ export default observer(function ActivityForm() {
     }
   }
 
-  function handleChange(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const { name, value } = event.target;
-    setActivity({ ...activity, [name]: value });
-  }*/
-
   if (loadingInitial) return <LoadingComponent content="Loading Activity..." />;
 
   return (
     <Segment clearing>
+      <Header content="Activity Details" sub color="teal" />
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
         initialValues={activity}
-        onSubmit={(value) => console.log(value)}
+        onSubmit={(value) => handleFormSubmit(value)}
       >
-        {({ values: activity, handleSubmit }) => (
+        {({ handleSubmit, isSubmitting, isValid, dirty }) => (
           <Form
             className="ui form"
             onSubmit={handleSubmit}
@@ -97,10 +93,18 @@ export default observer(function ActivityForm() {
               placeholder="Catgory"
               name={"category"}
             />
-            <MyInputText placeholder="Date" name={"date"} />
+            <MyDateInput
+              placeholderText="Date"
+              name={"date"}
+              showTimeSelect
+              timeCaption="time"
+              dateFormat={"MMMM d, yyyy hh:m aa"}
+            />
+            <Header content="Location Details" sub color="teal" />
             <MyInputText placeholder="City" name={"city"} />
             <MyInputText placeholder="Venue" name={"venue"} />
             <Button
+              disabled={isSubmitting || !dirty || !isValid}
               loading={loading}
               floated="right"
               positive

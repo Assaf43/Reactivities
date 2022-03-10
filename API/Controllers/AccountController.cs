@@ -46,12 +46,14 @@ namespace API.Controllers
         {
             if (await _userMangager.Users.AnyAsync(x => x.Email == registerDto.Email))
             {
-                return BadRequest("Email " + registerDto.Email + " Is Used");
+                ModelState.AddModelError("email", "Email " + registerDto.Email + " Is Used");
+                return ValidationProblem();
             }
 
             if (await _userMangager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
             {
-                return BadRequest("User Name " + registerDto.UserName + " Is Used");
+                ModelState.AddModelError("userName", "User Name " + registerDto.UserName + " Is Used");
+                return ValidationProblem();
             }
 
             var user = new AppUser

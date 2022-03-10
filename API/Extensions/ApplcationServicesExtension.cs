@@ -1,5 +1,7 @@
 using Application.Activities;
 using Application.Core;
+using Application.Interfaces;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -13,9 +15,9 @@ namespace API.Extensions
             IConfiguration config)
         {
             services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-});
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+            });
 
             services.AddDbContext<DataContext>(opt =>
             {
@@ -32,6 +34,7 @@ namespace API.Extensions
 
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }
